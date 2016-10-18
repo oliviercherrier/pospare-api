@@ -5,6 +5,9 @@ var Todo = require('../models/Todo.js');
 
 /* GET /todos listing. */
 router.get('/', function(req, res, next) {
+  // Check JWT
+
+
   Todo.find(function (err, todos) {
     if (err) return next(err);
     res.json(todos);
