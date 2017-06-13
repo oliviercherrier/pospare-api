@@ -37,14 +37,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/todos', expressJwt({
+app.use('/', expressJwt({
   secret: new Buffer(config.jwt.secret, 'base64'),
   audience: config.jwt.client
 }));
 
 app.use('/', routes);
-app.use('/users', users);
-app.use('/todos', todos);
+app.use('/api/v1/users', users);
+app.use('/api/v1/todos', todos);
 
 
 // Use native Node promises
