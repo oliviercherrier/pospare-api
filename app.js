@@ -10,7 +10,6 @@ var expressJwt = require('express-jwt');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
-var todos = require('./routes/todos');
 var mongoose = require('mongoose');
 var config = require('./conf/conf.js');
 
@@ -44,7 +43,6 @@ app.use('/', expressJwt({
 
 app.use('/', routes);
 app.use('/api/v1/users', users);
-app.use('/api/v1/todos', todos);
 
 
 // Use native Node promises

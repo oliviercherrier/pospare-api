@@ -1,17 +1,19 @@
 var express = require('express');
-var router = express.Router();
+var workoutRouter = express.Router({mergeParams: true});
 var mongoose = require('mongoose');
 var workout = require('../models/Workout.js');
+var User = require('../models/User.js');
+
 
 // /users GET
 // /users/:userId GET
 
 /* GET users listing. */
-router.get('/users/:userid/workouts', function(req, res, next) {
-  User.find(function (err, todos) {
+workoutRouter.get('/', function(req, res, next) {
+  User.find(function (err, users) {
     if (err) return next(err);
-    res.json(workout);
+    res.json(users);
   });
 });
 
-module.exports = router;
+module.exports = workoutRouter;
