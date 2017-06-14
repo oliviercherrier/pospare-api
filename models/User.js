@@ -6,15 +6,17 @@ var UserSchema = new mongoose.Schema({
   firstname: String,
   lastname: String,
   email: String,
-  roles: [{type: mongoose.Schema.Types.ObjectId, ref: 'Role'}]
+  roles: [{type: mongoose.Schema.Types.ObjectId, ref: 'Role'}],
+  workouts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Workout'}]
 });
 
-UserSchema.statics.findByPospareId = function(name, cb) {
-  return this.findOne({ id: new RegExp(name, 'i') }, cb).populate('roles').exec();
+UserSchema.statics.findByPospareId = function(userid, populate, cb) {
+  return this.findOne({ id: userid }, cb).populate(populate).exec();
+
 };
 
 UserSchema.methods.isAdmin = function(){
-  console.log(this.roles.length);
+  console.log(this.roles);
   for (var i = 0; i < this.roles.length; i++){
     if(this.roles[i].name == "Administrator"){
       return true;
@@ -23,8 +25,8 @@ UserSchema.methods.isAdmin = function(){
   return false;
 }
 
-UserSchema.statics.findByEMail = function(useremail,cb){
-  return this.findOne({email: new RegExp(useremail,'i')}, cb).populate('roles').exec();
+UserSchema.statics.findByEMail = function(useremail,populate,cb){
+  return this.findOne({email: useremail}, cb).populate(populate).exec();
 }
 
 module.exports = mongoose.model('User', UserSchema);

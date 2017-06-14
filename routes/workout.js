@@ -10,9 +10,14 @@ var User = require('../models/User.js');
 
 /* GET users listing. */
 workoutRouter.get('/', function(req, res, next) {
-  User.find(function (err, users) {
-    if (err) return next(err);
-    res.json(users);
+  User.findByPospareId(req.params.userId, ["workouts"], function(err, user) {
+    if (err) res.send(err);
+    if(!user){
+      res.sendStatus(204);
+    }
+    else{
+      res.json(user.workouts);
+    }
   });
 });
 

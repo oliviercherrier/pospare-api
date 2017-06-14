@@ -8,8 +8,7 @@ var workoutRouter = require("./workout.js");
 // /users/:userId GET
 userRouter.get('/:userid',  function(req, res) {
 
-
-  User.findByPospareId(req.params.userid, function(err, user) {
+  User.findByPospareId(req.params.userid, ["roles"], function(err, user) {
     if (err) res.send(err);
     if(!user){
       res.sendStatus(204);
@@ -17,8 +16,6 @@ userRouter.get('/:userid',  function(req, res) {
     else{
       res.json(user);
     }
-
-    
   });
 });
 
@@ -30,19 +27,18 @@ userRouter.get('/',
     User.find(function (err, users) {
       if (err) return next(err);
       res.json(users);
-    }).populate('roles').exec();
+    }).populate('roles').populate('workouts').exec();
   }
 );
 
 userRouter.use('/:userId/workouts', workoutRouter);
 
-
-
-
 function isAuthorized(req, res, next){
-  User.findByEMail(req.headers.useremail, function(err, user){
+  
+  User.findByEMail(req.headers.useremail, ["roles"], function(err, user){
+
     if (err) res.send(err);
-    if(! user.isAdmin()){
+    if(! user || !user.isAdmin()){
       res.status(401).json({status: 'error', msg: 'Your are not allowed to see list of users'});
     } 
     else {
@@ -50,6 +46,5 @@ function isAuthorized(req, res, next){
     }
   });
 }
-
 
 module.exports = userRouter;
