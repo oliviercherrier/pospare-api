@@ -7,11 +7,11 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressJwt = require('express-jwt');
+var config = require('config');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var mongoose = require('mongoose');
-var config = require('./conf/conf.js');
 
 var app = express();
 
@@ -37,8 +37,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', expressJwt({
-  secret: new Buffer(config.jwt.secret, 'base64'),
-  audience: config.jwt.client
+  secret: new Buffer(config.get("jwt.secret"), 'base64'),
+  audience: config.get("jwt.client")
 }));
 
 app.use('/', routes);

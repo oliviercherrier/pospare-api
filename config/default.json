@@ -1,0 +1,7 @@
+{
+    "jwt": {
+        "expiresInSeconds": 86400,
+        "secret": "MY_SECRET",
+        "client": "MY_CLIENT"
+    }
+}
