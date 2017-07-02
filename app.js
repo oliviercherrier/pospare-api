@@ -36,10 +36,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', expressJwt({
-  secret: new Buffer(config.get("jwt.secret"), 'base64'),
-  audience: config.get("jwt.client")
-}));
+if(config.get("configMode") != "test"){
+  app.use('/', expressJwt({
+    secret: new Buffer(config.get("jwt.secret"), 'base64'),
+    audience: config.get("jwt.client")
+  }));
+}
+
 
 app.use('/', routes);
 app.use('/api/v1/users', users);
@@ -48,7 +51,7 @@ app.use('/api/v1/users', users);
 // Use native Node promises
 mongoose.Promise = global.Promise;
 // connect to MongoDB
-mongoose.connect('mongodb://localhost/pospare-api')
+mongoose.connect('mongodb://'+ config.get("dbConfig.host") + '/' + config.get("dbConfig.dbName"))
   .then(() =>  console.log('connection succesful'))
   .catch((err) => console.error(err));
 

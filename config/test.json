@@ -1,5 +1,5 @@
 {
-    "configMode": "default",
+    "configMode": "test",
     "jwt": {
         "expiresInSeconds": 86400,
         "secret": "MY_SECRET",
@@ -7,6 +7,6 @@
     },
     "dbConfig": {
         "host": "localhost",
-        "dbName": "pospare-api"
+        "dbName": "pospare-api-test"
     }
 }

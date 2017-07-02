@@ -16,7 +16,6 @@ UserSchema.statics.findByPospareId = function(userid, populate, cb) {
 };
 
 UserSchema.methods.isAdmin = function(){
-  console.log(this.roles);
   for (var i = 0; i < this.roles.length; i++){
     if(this.roles[i].name == "Administrator"){
       return true;
