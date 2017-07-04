@@ -2,7 +2,11 @@
 process.env.NODE_ENV = 'test';
 
 var mongoose = require("mongoose");
+
+// Require schema
 var User = require('../models/User');
+var Role = require('../models/Role');
+var Workout = require('../models/Workout');
 
 //Require the dev-dependencies
 var chai = require('chai');
@@ -10,11 +14,30 @@ var expect = chai.expect;
 var chaiHttp = require('chai-http');
 var server = require('../app');
 var should = chai.should();
-
 chai.use(chaiHttp);
+
 //Our parent block
 describe('Users', () => {
-/*
+    beforeEach((done) => { 
+        //Before each test we empty the database
+
+        //Remove Roles
+        Role.remove({}, (err) => {
+            //Remove Users
+            User.remove({}, (err) => {
+                // Remove Workouts
+                Workout.remove({}, (err) => {
+                    // Create user olivier.cherrier@gmail.com
+                    Role.create({"name" : "Administrator"},(err, adminRole) => {
+                        User.create({ firstname : "Olivier", businessId: "1", lastname : "Cherrier", email : "olivier.cherrier@gmail.com", roles:[adminRole]}, (err) => { 
+                            done();             
+                        });
+                    });
+                });
+            });
+        });
+    });
+  /*
   * Test the /GET route
   */
     describe('/GET users', () => {
@@ -67,8 +90,7 @@ describe('Users', () => {
                     // Check that workout is populated
                     res.body.should.have.property('workouts');
                     res.body.workouts.should.be.a('array');
-                    res.body.workouts.length.should.be.eql(1);
-                    res.body.workouts[0].should.have.property('name').eql("Sortie à vélo de l'après midi");
+                    res.body.workouts.length.should.be.eql(0);
 
                     done();
                 });

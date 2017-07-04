@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var Role = require('../models/Role.js');
 
 var UserSchema = new mongoose.Schema({
+  businessId: String,
   firstname: String,
   lastname: String,
   email: String,
@@ -11,7 +12,7 @@ var UserSchema = new mongoose.Schema({
 });
 
 UserSchema.statics.findByPospareId = function(userid, populate, cb) {
-  return this.findOne({ id: userid }, cb).populate(populate).exec();
+  return this.findOne({ businessId: userid }, cb).populate(populate).exec();
 
 };
 
