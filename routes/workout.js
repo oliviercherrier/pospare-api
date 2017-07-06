@@ -18,7 +18,10 @@ workoutRouter.put('/', function(req, res, next) {
     else{
       // Add workout for this user
       var newWorkout = new workout();
-      newWorkout.name = req.body.name;
+      if (req.body.name){
+        newWorkout.name = req.body.name;
+      }
+      newWorkout.active = true;
       newWorkout.save();
       user.workouts.push(newWorkout);
       user.save();
