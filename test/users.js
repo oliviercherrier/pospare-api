@@ -20,23 +20,16 @@ chai.use(chaiHttp);
 describe('Users', () => {
     beforeEach((done) => { 
         //Before each test we empty the database
-
-        //Remove Roles
-        Role.remove({}, (err) => {
-            //Remove Users
-            User.remove({}, (err) => {
-                // Remove Workouts
-                Workout.remove({}, (err) => {
-                    // Create user olivier.cherrier@gmail.com
-                    Role.create({"name" : "Administrator"},(err, adminRole) => {
-                        User.create({ firstname : "Olivier", businessId: "1", lastname : "Cherrier", email : "olivier.cherrier@gmail.com", roles:[adminRole]}, (err) => { 
-                            done();             
-                        });
-                    });
-                });
-            });
-        });
+        Role.remove({})
+            .then(() => User.remove({}))
+            .then(() => Workout.remove({}))
+            .then(() => Workout.remove({}))
+            .then(() => Role.create({"name" : "Administrator"}))
+            .then((adminRole)=> User.create({ firstname : "Olivier", businessId: "1", lastname : "Cherrier", email : "olivier.cherrier@gmail.com", roles:[adminRole]}))
+            .then (()=> done())
+            .catch((err) => console.error(err));
     });
+    
   /*
   * Test the /GET route
   */

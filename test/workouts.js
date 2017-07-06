@@ -2,6 +2,9 @@
 process.env.NODE_ENV = 'test';
 
 var mongoose = require("mongoose");
+var Promise = require('bluebird');
+
+// Require models
 var User = require('../models/User');
 var Workout = require('../models/Workout');
 var Role = require('../models/Role');
@@ -17,25 +20,18 @@ chai.use(chaiHttp);
 
 describe('Workouts', () => {
     beforeEach((done) => { 
-        //Before each test we empty the database
+        Role.remove({})
+            .then(() => User.remove({}))
+            .then(() => Workout.remove({}))
+            .then(() => {
+                var workoutPromise = Workout.create({name: "Sortie à vélo"});
+                var rolePromise = Role.create({name: "Administrator"});
 
-        //Remove Roles
-        Role.remove({}, (err) => {
-            //Remove Users
-            User.remove({}, (err) => {
-                // Remove Workouts
-                Workout.remove({}, (err) => {
-                    // Create user olivier.cherrier@gmail.com
-                    Role.create({"name" : "Administrator"},(err, adminRole) => {
-                        Workout.create({name: "Sortie à vélo"}, (err, myWorkout) => {
-                            User.create({ firstname : "Olivier", businessId: "1", lastname : "Cherrier", email : "olivier.cherrier@gmail.com", roles:[adminRole], workouts: [myWorkout]}, (err) => { 
-                                done();             
-                            });
-                        });
-                    });
+                Promise.all([rolePromise, workoutPromise]).spread(function(resultRole, resultWorkout) {
+                    User.create({ firstname : "Olivier", businessId: "1", lastname : "Cherrier", email : "olivier.cherrier@gmail.com", roles:[resultRole], workouts: [resultWorkout]});
                 });
-            });
-        });
+            })
+            .then(() => {done()});
     });
 
     describe('/GET workouts', () => {
