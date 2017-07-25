@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var Role = require('../models/Role.js');
+var Role = require('./Role.js');
 
 var UserSchema = new mongoose.Schema({
   businessId: String,
@@ -11,8 +11,8 @@ var UserSchema = new mongoose.Schema({
   workouts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Workout'}]
 });
 
-UserSchema.statics.findByPospareId = function(userid, populate, cb) {
-  return this.findOne({ businessId: userid }, cb).populate(populate).exec();
+UserSchema.statics.findByPospareId = function(userid, population, cb) {
+  return this.findOne({ businessId: userid }, cb).populate(population).exec();
 
 };
 

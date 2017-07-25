@@ -47,7 +47,7 @@ describe('Workouts', () => {
 
 
     describe('/POST workout', function() {
-         it('it should add an active workout with name "Sortie à vélo  unitaire" to user olivier.cherrier@gmail.com', function (done) {
+         it('it should add an active workout with name "Sortie à vélo unitaire" to user "1"', function (done) {
             chai.request(server)
                 .put('/api/v1/users/1/workouts')
                 .set('useremail', 'olivier.cherrier@gmail.com') // Header data
@@ -56,7 +56,7 @@ describe('Workouts', () => {
                     // Test answer of REST API
                     should.not.exist(err);
                     res.should.have.status(200);
-                    res.body.should.have.property('message').eql("Workout updated!");
+                    res.body.should.have.property('message').eql("Workout created!");
 
 
                     // Test data inserted into database
@@ -72,12 +72,12 @@ describe('Workouts', () => {
             
          });
 
-         it('it should add an active workout with no name to user olivier.cherrier@gmail.com', function(done) {
+         it('it should add an active workout with no name to user "1"', function(done) {
             chai.request(server)
                 .put('/api/v1/users/1/workouts')
                 .set('useremail', 'olivier.cherrier@gmail.com') // Header data
                 .end((err, res) => {
-                    res.body.should.have.property('message').eql("Workout updated!");
+                    res.body.should.have.property('message').eql("Workout created!");
 
                     should.not.exist(err);
                     res.should.have.status(200);
@@ -89,6 +89,22 @@ describe('Workouts', () => {
                         user.workouts[0].should.have.property('active').eql(true);
                         done();
                     });
+                    
+                }
+            );
+         });
+
+         it('it should get workouts of users "1"', function(done) {
+            chai.request(server)
+                .get('/api/v1/users/1/workouts')
+                .set('useremail', 'olivier.cherrier@gmail.com') // Header data
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(200);
+                   
+                    res.body.should.be.a('array');
+                    res.body.length.should.be.eql(0);
+                    done();
                     
                 }
             );
